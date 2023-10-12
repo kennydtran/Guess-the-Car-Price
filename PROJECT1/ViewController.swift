@@ -38,7 +38,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var playAgainButton: UIButton!
     @IBOutlet weak var roundLabel: UILabel!
+    @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var totalScoreLabel: UILabel!
+    @IBOutlet weak var returnToStartButton: UIButton!
     
     
     // MARK: - Properties
@@ -58,6 +60,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         currentCarIndex = roundArray[randomIndex]
         roundArray.remove(at: randomIndex)  // Eliminates duplicates per game.
         
+        startDisplay()
         displayCarInfo()
         setupUIElements()
     }
@@ -69,15 +72,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
         /// font and weight. This function focuses on the usability of the application.
         nextButton.isHidden = true
         playAgainButton.isHidden = true
+        returnToStartButton.isHidden = true
         
         guessPriceText.keyboardType = .phonePad    // Allows only numbers to be entered on iPhones.
         guessPriceText.delegate = self
         guessPriceText.layer.cornerRadius = 12
         guessPriceText.layer.borderWidth = 0.75
         
+        startButton.layer.cornerRadius = 20
         enterButton.layer.cornerRadius = 12
-        nextButton.layer.cornerRadius = 17
-        playAgainButton.layer.cornerRadius = 25
+        nextButton.layer.cornerRadius = 20
+        playAgainButton.layer.cornerRadius = 20
+
         
         titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         carMakeModel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -87,6 +93,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
         totalScoreLabel.font = UIFont.systemFont(ofSize: 24)
         
         self.hideKeyboardWhenTappedAround()
+    }
+    
+    
+    // MARK: - Starting Page
+    func startDisplay() {
+        /// startDisplay will hide all the game UI presented when the game begins. This display is a buffer from beginning the game.
+        setElementsHiddenStatus(true)
+    }
+    
+    func start() {
+        /// start will set the current round number to 0, take data from the carData array, display the game UI, and set the total score to 0.
+        currentRoundIndex = 0   // Sets current round number to 0.
+        roundArray = Array(0..<carData.count)   // Takes indices from carData array.
+        startButton.isHidden = true
+        setElementsHiddenStatus(false)
+        totalScoreReset()   // Sets the total score amount to 0.
+        moveNextCar()
     }
     
     
@@ -105,9 +128,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         nextButton.isHidden = true
         totalScoreLabel.isHidden = true
-        roundLabel.isHidden = false
         
         guessPriceText.isUserInteractionEnabled = true  // Allows the user to enter in a number for the textbox.
+        enterButton.isUserInteractionEnabled = true
         
         roundCount()    // Displays current round.
     }
@@ -124,10 +147,36 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     // MARK: - Button Actions
-    @IBAction func guessSubmitted(_ sender: Any) {
-        /// guessSubmitted is a large function that performs upon user interaction. It is the enter button, available for the user to submit
-        /// their guess after entering it in the textbox. This function will take the MSRP from the carData array and calculate the user's
-        /// guess with the MSRP. The result of the calculation will be the score, and the score will be added to the total score. The 'next'
+    @IBAction func guessSubmittedButton(_ sender: Any) {
+        /// guessSubmittedButton is a funtion based on user interaction. This function will be the "SUBMIT" button for when the user
+        /// wants to submit their guess.
+        guessSubmitted()
+    }
+    
+    @IBAction func nextCar(_ sender: Any) {
+        /// nextCar is a function based on user interaction. This function will be the "NEXT" button after a round has been completed.
+        moveNextCar()
+    }
+    
+    @IBAction func playAgainButton(_ sender: Any) {
+        /// playAgainButton is a function based on user interaction. This function will be the "PLAY AGAIN" button after the game has
+        /// been completed.
+        playAgain()
+    }
+    @IBAction func startButton(_ sender: Any) {
+        /// startButton is a function based on user interaction. This function willl be the "START" button that begins the game.
+        start()
+    }
+    @IBAction func returnToStartButton(_ sender: Any) {
+        /// returnToStartButton is a function based on user interaction. This function will be the "RETURN TO START" button that brings
+        /// the user back to the display with the "START" button.
+        returnToStart()
+    }
+    
+    // MARK: - Functions: During Input (Current Round)
+    func guessSubmitted() {
+        /// guessSubmitted will take the MSRP from the carData array and calculate the user's guess with the MSRP.
+        /// The result of the calculation will be the score, and the score will be added to the total score. The 'next'
         /// button will display, allowing the user to move on from the completed round.
         guard let guessedPrice = Double(guessPriceText.text ?? "0") else { return }
         let car = carData[currentCarIndex]
@@ -170,19 +219,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         nextButton.isHidden = false   // The "next" button will appear.
         view.endEditing(true)
         guessPriceText.isUserInteractionEnabled = false   // Prevents user from editing the textbox again.
+        enterButton.isUserInteractionEnabled = false
     }
-    
-    @IBAction func nextCar(_ sender: Any) {
-        /// nextCar is a function based on user interaction. This function will be the "NEXT" button after a round has been completed.
-        moveNextCar()
-    }
-    
-    @IBAction func playAgainButton(_ sender: Any) {
-        /// playAgainButton is a function based on user interaction. This function will be the "PLAY AGAIN" button after the game has
-        /// been completed.
-        playAgain()
-    }
-    
     
     // MARK: - Functions: Post Input (Next Round)
     func moveNextCar() {
@@ -191,10 +229,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         /// AGAIN" button and the total score recorded from all rounds.
         if currentRoundIndex >= totalRound {    // Conditions if the current round number is equal to however many rounds are set.
             totalScore()
-            playAgainButton.isHidden = false
-            totalScoreLabel.isHidden = false
+            setEndElementsHiddenStatus(false)
             setElementsHiddenStatus(true)   // Hide everything.
-            roundLabel.isHidden = true
+//            roundLabel.isHidden = true
             return
         } else {
             let randomIndex = Int(arc4random_uniform(UInt32(roundArray.count)))   // Randomizer for next car.
@@ -211,7 +248,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         currentRoundIndex = 0   // Resets current round number to 0.
         roundArray = Array(0..<carData.count)   // Takes indices from carData array again.
         
-        playAgainButton.isHidden = true
+        setEndElementsHiddenStatus(true)
         setElementsHiddenStatus(false)
         totalScoreReset()   // Resets the total score amount to 0.
         moveNextCar()   // Sets up next round.
@@ -222,10 +259,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
         totalScoreValue = 0
     }
     
+    func returnToStart() {
+        /// returnToStart will remove all existing UI elements and will reintroduce the "START" button.
+        setEndElementsHiddenStatus(true)
+        setElementsHiddenStatus(true)
+        startButton.isHidden = false
+    }
     
-    // MARK: - Function: Hide or Show Elements
+    
+    // MARK: - Functions: Hide or Show Elements
     func setElementsHiddenStatus(_ isHidden: Bool) {
-        /// setElementsHiddenStatus will either hide elements from displayCarInfo and moveNextCar. A boolean variable is presented to
+        /// setElementsHiddenStatus will either hide or show elements from displayCarInfo and moveNextCar. A boolean variable is presented to
         /// do one of the following.
         imageView.isHidden = isHidden
         actualPrice.isHidden = isHidden
@@ -235,6 +279,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
         nextButton.isHidden = isHidden
         enterButton.isHidden = isHidden
         scoreLabel.isHidden = isHidden
+        roundLabel.isHidden = isHidden
+    }
+    
+    func setEndElementsHiddenStatus(_ isHidden: Bool) {
+        /// setEndElementsHiddenStatus will either hide elements from the first condition of moveNextCar, or show elements. A boolean variable
+        /// is presented to do one of the following.
+        playAgainButton.isHidden = isHidden
+        returnToStartButton.isHidden = isHidden
+        totalScoreLabel.isHidden = isHidden
     }
     
     
@@ -243,7 +296,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         /// textFieldShouldReturn will allow the user to use the "return" key to submit their guess. This is primarily for users that are testing the
         /// application, allowing easier usability.
         if textField == guessPriceText {
-            guessSubmitted(textField)
+            guessSubmittedButton(textField)
             return false
         }
         return true
