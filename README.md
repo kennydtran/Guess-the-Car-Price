@@ -25,7 +25,7 @@ This game was heavily inspired by [The Auction Game](https://neal.fun/auction-ga
 8. Press "Play Again" to give it another shot, or press "Return to Start" to return to the starting screen.
 
 ### Technology
-**Language** - Swift
+**Language** - Swift<br>
 **Framework** - UIKit
 
 ### Future Plans
@@ -36,4 +36,4 @@ This game was heavily inspired by [The Auction Game](https://neal.fun/auction-ga
 - Many more!
 
 ### Acknowledgements
-I'd like to hugely thank Neal Argwal for inspiring this project with [The Auction Game](https://neal.fun/auction-game/). 
+Once again, I'd like to hugely thank Neal Argwal for inspiring this project with [The Auction Game](https://neal.fun/auction-game/). 
