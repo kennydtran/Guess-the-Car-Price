@@ -16,4 +16,24 @@ This game was heavily inspired by [The Auction Game](https://neal.fun/auction-ga
 
 ### How to Play
 1. Launch the game.
-2. 
+2. Press the "Start" button to begin the game.
+3. An image of a car will appear. Type in your guess of the displayed car's MSRP of its time.
+4. Press the arrow button labeled ">" to submit your guess.
+5. The actual MSRP of the car will show on top of the car image. Points are then awarded on how accurate your guess was.
+6. Press the "Next" button to show the next car.
+7. After completing 9 rounds, your total score will display. If you scored 9 perfect runs, your score should be 9,000.
+8. Press "Play Again" to give it another shot, or press "Return to Start" to return to the starting screen.
+
+### Technology
+**Language** - Swift
+**Framework** - UIKit
+
+### Future Plans
+- Leaderboard to track your top scores
+- Daily challenges
+- Different game modes
+- Fun facts/information about the cars
+- Many more!
+
+### Acknowledgements
+I'd like to hugely thank Neal Argwal for inspiring this project with [The Auction Game](https://neal.fun/auction-game/). 
