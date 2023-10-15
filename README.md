@@ -12,7 +12,7 @@ The game displays an image of a car, and playeres are prompted to guess its MSRP
 **Diverse Car Data** - The game includes a variety of cars, from everyday compact vehicles to one-off luxury supercars, to test the breadth of players' knowledge.<br><br>
 
 ### Inspiration
-This game was heavily inspired by [The Auction Game](https://neal.fun/auction-game/) by Neal Agarwal. I wanted to create a similar experience tailored to car enthusiasts.
+This game was heavily inspired by [The Auction Game](https://neal.fun/auction-game/) by Neal Agarwal. I wanted to create a similar experience tailored to car enthusiasts.<br><br>
 
 ### How to Play
 1. Launch the game.
@@ -22,18 +22,18 @@ This game was heavily inspired by [The Auction Game](https://neal.fun/auction-ga
 5. The actual MSRP of the car will show on top of the car image. Points are then awarded on how accurate your guess was.
 6. Press the "Next" button to show the next car.
 7. After completing 9 rounds, your total score will display. If you scored 9 perfect runs, your score should be 9,000.
-8. Press "Play Again" to give it another shot, or press "Return to Start" to return to the starting screen.
+8. Press "Play Again" to give it another shot, or press "Return to Start" to return to the starting screen.<br><br>
 
 ### Technology
 **Language** - Swift<br>
-**Framework** - UIKit
+**Framework** - UIKit<br><br>
 
 ### Future Plans
 - Leaderboard to track your top scores
 - Daily challenges
 - Different game modes
 - Fun facts/information about the cars
-- Many more!
+- Many more!<br><br>
 
 ### Acknowledgements
 Once again, I'd like to hugely thank Neal Argwal for inspiring this project with [The Auction Game](https://neal.fun/auction-game/). 
